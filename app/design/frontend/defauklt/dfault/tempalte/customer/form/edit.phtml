@@ -1,0 +1,280 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2014 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+?>
+<div class="page-title">
+	<h1><?php echo $this->__('My Profile') ?></h1>
+</div>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<form action="<?php echo $this->getUrl('customer/account/editPost') ?>" method="post" id="form-validate" autocomplete="off">
+    <div class="fieldset blue_heade_table">
+        <?php echo $this->getBlockHtml('formkey')?>
+		<h2 class="blu_t_heading"><?php echo $this->__('Account Information') ?></h2>
+        
+		<table class="table_fff_normal margin_20_30" style="width:70%"> 
+			<tbody>
+			<tr>  
+				<td ><label class="" for="FirstName">First Name</label></td>
+				<td><input type="text" id="firstname" name="firstname" value="<?php echo $this->escapeHtml($this->getCustomer()->getFirstname()) ?>" title="First name" maxlength="255" class="input-text <?php echo $this->helper('customer/address')->getAttributeValidationClass('firstname') ?>" <?php echo $this->getFieldParams() ?> /></td> 
+
+				<td><label class="" for="LastName">Last Name</label></td>
+				<td><input type="text" id="lastname" name="lastname" value="<?php echo $this->escapeHtml($this->getCustomer()->getLastname()) ?>" title="Last name" maxlength="255" class="input-text <?php echo $this->helper('customer/address')->getAttributeValidationClass('lastname') ?>" <?php echo $this->getFieldParams() ?> /></td> 
+			</tr>
+
+			<tr>  
+				<td ><label class="" for="Title">Title</label></td>
+				<td><input type="text" id="customer_title" name="customer_title" value="<?php echo $this->escapeHtml($this->getCustomer()->customer_title) ?>" title="Title" maxlength="255" class="input-text" <?php echo $this->getFieldParams() ?>/></td> 
+
+				<td><label class="" for="firstname">E-mail</label></td>
+				<td><input type="text" name="email" id="email" value="<?php echo $this->escapeHtml($this->getCustomer()->getEmail()) ?>" title="E-mail" class="input-text required-entry validate-email" /></td>
+			</tr>
+			
+			<?php 
+				$customerGroupId =	Mage::helper('customeraccount')->getNonAdminGroup()->getId(); 
+				$customer = Mage::getSingleton('customer/session')->getCustomer();
+				$default_customeraccount = Mage::helper('customeraccount/customer')->getDefaultCustomeraccount($customer);
+				if($customerGroupId == $customer['group_id']) {
+			?>
+			<!--
+			<tr>  
+				<td ><label class="" for="PurchaseLimit">Purchase Limit</label></td>
+				<td><input type="text" name="purchase_limit" id="purchase_limit" title="Phone number" maxlength="15" class="input-text" disabled value="<?php echo $this->escapeHtml($this->getCustomer()->purchase_limit) ?>" /></td> 
+				<?php
+					$attribute = Mage::getModel('eav/config')->getAttribute('customer','featureaccess');
+					$featureAccess = explode(',',$this->getCustomer()->featureaccess);
+				?>
+				<td><label class="" for="FeatureAccess">Feature Access</label></td>
+				<td>
+					<select name="featureaccess[]" id="featureaccess" multiple="multiple" class="" disabled>
+						<?php
+							 $options = $attribute->getSource()->getAllOptions();							 
+							 foreach($options as $option){
+						?>
+							<option value='<?php echo $option['value']?>' <?php if(in_array($option['value'],$featureAccess)){ echo 'selected';}?>><?php echo $this->__($option['label'])?></option>
+						<?php }  ?>
+					</select>
+				</td>
+			</tr>-->
+			
+			<?php } ?>
+			
+			
+			<tr>  
+				<td ><label class="" for="PhoneNumber">Phone Number</label></td>
+				<td><input type="text" id="customer_phone" name="customer_phone" value="<?php echo $this->escapeHtml($this->getCustomer()->customer_phone) ?>" title="Phone number" maxlength="15" class="input-text" /></td> 			
+			</tr>
+			</tbody>
+		</table>
+		
+		
+		<div style="width:100%; float:left; background:#fff; height:30px;"> </div>
+			<ul class="form-list acc_control">
+
+			<h2 class="blu_t_heading"><?php echo $this->__('Access Control') ?></h2>
+		
+            <li class="control">
+                <input type="hidden" name="buying_pattern_check" value="0" />
+                <input  type="checkbox" name="buying_pattern_check" id="buying_pattern_check" value="1" title="<?php echo $this->__('Enable Buying Pattern') ?>" class="checkbox" <?php if($this->escapeHtml($this->getCustomer()->buying_pattern_check)==1): ?>checked="checked"<?php endif; ?> />
+                <label style="width:250px;" for="buying_pattern_check"><?php echo $this->__('Enable Buying Pattern') ?></label>
+            </li>
+            <li class="control">
+                <input type="checkbox" name="change_password" id="change_password" value="1" onclick="setPasswordForm(this.checked)" title="<?php echo $this->__('Change Password') ?>"<?php if($this->getCustomer()->getChangePassword()==1): ?> checked="checked"<?php endif; ?> class="checkbox" /><label for="change_password"><?php echo $this->__('Change Password') ?></label>
+            </li>
+			     
+        </ul>
+    </div>
+    <div class=" blue_heade_table cpdiv fieldset ch_password" style="display:none;">
+		<h2 class="blu_t_heading"><?php echo $this->__('Change Password') ?></h2>
+		<ul class="form-list " style="">
+            <li>
+                <span><em>*</em> Old password</span>
+                <div class="input-box">                  
+                    <input type="text" class="input-text no-display" name="dummy" id="dummy" />
+                    <input type="password" title="Old password" class="input-text cpstyle" name="current_password" id="current_password" />
+                </div>				
+            </li>
+            <li>
+			    <span><em>*</em> New password</span>
+				<div class="input-box">
+					<input type="password" title="New password" class="cpstyle input-text" name="password" id="password" />
+				    <div class="spassword_error validation-advice" style="display:none;">Enter minimum 6 chars with atleast 1 number, lower, upper &amp; special(!@#$%&) char.</div>
+				</div>
+			</li>
+            <li>                
+				<span><em>*</em> Re-enter new password</span>
+				<div class="input-box">
+					<input type="password"  title="Re-enter new password" class="cpstyle input-text validate-cpassword" name="confirmation" id="confirmation" />
+				</div>					
+            </li>
+			
+			<input type="text" id="current_password1" name=""  class="" title="Old password">
+        </ul>
+	
+		<div class="c_p_box2">  
+		<ul> 
+			<li><b>Passwords must meet complexity requirements</b> <br /> Passwords must be at least six characters in length or the number of characters specified in the Minimum password length policy setting.</li>
+			<li><b>Passwords must contain characters from at least three of the following four categories:</b>
+			<ul>
+			<li> English uppercase alphabet characters (A–Z)</li>
+			<li> English lowercase alphabet characters (a–z))</li>
+			<li> Base 10 digits (0–9)</li>
+			<li> Non-alphanumeric characters (for example, !$#,%)</li> 
+			</ul>
+			</li>
+		</ul>
+		</div>
+		
+     
+       
+    </div>
+  
+	  <div class=" cpnewcss width_100per float_r">
+        <button type="submit" onclick="checkcommonPassword()" title="<?php echo $this->__('Update Profile') ?>" class="blue_button bor_radius float_r margin_l_r_10"><span><span><?php echo $this->__('Update Profile') ?></span></span></button> 
+		<a id="form_page" alt="" class="blue_button bor_radius float_r ch_addressbtn">Change Address</a>
+	</div>
+	
+</form>
+<div class="blue_heade_table">
+<!--CustomerInformation Added reports -->
+<form action="<?php echo $this->getUrl('notes/index/companyrecieved') ?>" method="post">
+<div class="s_rec_information margin_bot_30">
+<h2 class="blu_t_heading"> Shipment Receiving Information </h2>
+<div class="accept_shipment_boxs ">
+
+<h3 class="blacktext_13 font_15 margin_bot_10 display_block"> Accept shipment on these days</h3>
+<ul>
+<?php
+$customerId=$customer->getId();
+$customeraccountId=$default_customeraccount['id'];//current account id
+$company_recieving_dates =Mage::getModel('customeraccount/customeraccount')->getCompanyrecievingdates($customerId,$customeraccountId);
+$newarray=explode(',',$company_recieving_dates);//fetched from db
+$array=array('Tuesday','Wednesday','Thursday','Friday');
+foreach($array as $arr)
+{
+if(in_array($arr,$newarray))//check for the values exist
+{
+?>
+<li class="shipment_boxs_clicked"><a href="#"><?php echo $arr;?><input style="margin-left:5px;" type="checkbox" class="chk_box_margn" id="companyrecieveweekdays" checked name="companyrecieveweekdays[]" value='<?php echo $arr ;?>'></input> </a> </li>
+<?php } 
+else { ?>
+<li class="shipment_boxs_clicked"><a href="#"><?php echo $arr;?><input style="margin-left:5px;" type="checkbox" id="companyrecieveweekdays" name="companyrecieveweekdays[]" value='<?php echo $arr ;?>'></input> </a> </li>
+<?php 
+} 
+} ?>
+<input class="blue_button" type="submit" value="Saved" />
+</ul>
+<div class="clr_both"> </div>
+</div>
+</div>
+</form>
+</div>
+	  <style type ="text/css">
+	  #current_password1,#advice-required-entry-current_password1{ display:none;}
+	  </style>
+	<div class="ship_account_block"><?php echo $this->getChildHtml('ship_account') ?></div>
+<script type="text/javascript">
+//password
+
+
+	
+		function checkcommonPassword()
+		{
+		
+		 var  spassword = jQuery("#password").val();
+		 
+         checkSPassword(spassword);
+		 return false;
+		
+		}
+		
+	    
+		function formReturnfunc(){
+		 return false;
+		 }		
+				
+		function checkSPassword(password,event){
+		
+			var pattern = /^.*(?=.{6,})(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&]).*$/;
+			var pattern1 = /^.*(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&]).*$/;
+		    var pattern2 = /^.*(?=.{6,})(?=.*[A-Z])(?=.*[!@#$%&]).*$/;
+			var pattern3 = /^.*(?=.{6,})(?=.*[a-z])(?=.*[!@#$%&]).*$/;
+			var pattern4 = /^.*(?=.{6,})(?=.*[a-z])(?=.*[A-Z]).*$/;
+			
+			
+			 var  spassword = jQuery("#password").val(); 
+			 
+			if(!((pattern.test(password)) || (pattern1.test(password)) || (pattern2.test(password)) || (pattern3.test(password)) || (pattern4.test(password)))){
+				
+				if(spassword == "")
+				{
+				jQuery(".spassword_error").hide();
+				jQuery("#current_password1").addClass("input-text cpstyle required-entry validation-passed");
+				jQuery("#current_password1").val("");
+				
+				}
+				else
+				{
+			   if(jQuery("#current_password1").val() == "default")
+			   {
+			     //alert("true");
+
+				 jQuery("#current_password1").val("");
+				 
+			   }
+				jQuery(".spassword_error").show();
+				jQuery("#current_password1").addClass("required-entry");
+				return false;
+				}
+			}else{
+				jQuery(".spassword_error").hide();
+				//alert("coming 1" );
+				jQuery("#current_password1").val("default");
+			}
+		}
+
+//password
+
+//<![CDATA[
+    var dataForm = new VarienForm('form-validate', true);
+    function setPasswordForm(arg){
+        if(arg){
+            $('current_password').up(3).show();
+            $('current_password').addClassName('required-entry');
+            $('password').addClassName('required-entry');
+            $('confirmation').addClassName('required-entry');
+
+        }else{
+            $('current_password').up(3).hide();
+            $('current_password').removeClassName('required-entry');
+            $('password').removeClassName('required-entry');
+            $('confirmation').removeClassName('required-entry');
+        }
+    }
+
+    <?php if($this->getCustomer()->getChangePassword()): ?>
+        setPasswordForm(true);
+    <?php endif; ?>
+//]]>
+</script>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<modules>
+		<Mfv_History>
+			<version>0.0.1</version>
+		</Mfv_History>
+	</modules>
+	<frontend>
+	  	<routers>
+			<history>
+				<use>standard</use>
+				<args>
+					<module>Mfv_History</module>
+					<frontName>history</frontName>
+				</args>
+			</history>
+		</routers>
+	   <layout>
+			<updates>
+				<history>
+					<file>buyinghistory_report.xml</file>
+				</history>
+			</updates>
+		</layout>
+	</frontend>
+	<global>
+	  
+		<blocks>
+			<history>
+				<class>Mfv_History_Block</class>
+			</history>
+	   </blocks>
+	   <helpers>
+			<history>
+				<class>Mfv_History_Helper</class>
+			</history>
+		</helpers>
+		<models>
+			<history>
+				<class>Mfv_History_Model</class>
+			</history>
+		</models>  
+		 
+	</global>
+</config>

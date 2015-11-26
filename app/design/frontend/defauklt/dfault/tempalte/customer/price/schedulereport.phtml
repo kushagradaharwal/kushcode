@@ -1,0 +1,154 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2014 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+?>
+<?php $customer_id =  Mage::getSingleton('customer/session')->getCustomer()->getId();?>
+<!--price report cron tab-->
+<div style="width:100%; float:left; background:#fff; height:30px;"> </div>
+<div class="reportcheckbox">
+<input type="checkbox" id="reportchecked" name="reportchecked" value="reportchecked" >
+<span class="bold_txt"><?php echo $this->__("I would like to receive an updated price list");?></span> 
+</div>
+<script>
+jQuery(document).ready(function(){
+jQuery("input[type=radio]").attr('disabled', true);
+var reportType  = "<?php echo $this->getScheduledReportType();?>";
+
+
+
+if (!reportType || reportType == '' || reportType == null) {
+	jQuery("input[type=radio]").attr('disabled', true);
+} else {
+
+	jQuery("input[type=radio]").attr('disabled', false);
+	jQuery("input[type=checkbox]").attr('checked', true);
+	
+	if (reportType == 'weekly')
+	{
+		jQuery("#buying_pattern_report_weekly").attr('checked', true);
+	}else if (reportType == 'daily')
+	{
+		jQuery("#buying_pattern_report_day").attr('checked', true);
+	}else if (reportType == 'monthly')
+    { 
+		jQuery("#buying_pattern_report_monthly").attr('checked', true);
+	}else if (reportType == 'quarter')
+	{
+		jQuery("#buying_pattern_report_quarter").attr('checked', true);
+    }else if (reportType == 0)
+	{
+		jQuery("#reportchecked").attr('checked', false);
+	    jQuery("#buying_pattern_report_weekly,#buying_pattern_report_day,#buying_pattern_report_monthly,#buying_pattern_report_quarter").attr('checked', false);
+	}
+   //if (reportType == "none")
+	//	jQuery("#buying_pattern_report_none").attr('checked', true);
+//
+//
+
+}
+
+jQuery('#priceklistvalidation').click(function (){	
+
+var reportcheck = jQuery("#reportchecked").is(':checked');
+
+if(reportcheck == true)
+{
+	
+	var weeklyprm = jQuery("#buying_pattern_report_weekly").is(':checked');
+		
+	var dailyprm = jQuery("#buying_pattern_report_day").is(':checked');
+	var monthlyprm = jQuery("#buying_pattern_report_monthly").is(':checked');
+	var quarteprm = jQuery("#buying_pattern_report_quarter").is(':checked');
+	
+	if(weeklyprm == false && dailyprm == false  &&  monthlyprm  == false && quarteprm == false )
+	{
+	  alert("Please Select the subscription interval.");
+	  return false;
+	}
+	else
+    {
+	  return true;
+    }
+	
+}
+		
+});
+
+ jQuery("#reportchecked").click(function(){
+	
+		var checkval = this.checked;
+		if (checkval == true) {
+				jQuery("input[type=radio]").attr('disabled', false);
+		}else
+		 {
+           jQuery("input[type=radio]").attr('disabled', true);
+		   jQuery("input:radio").removeAttr("checked");
+		 }			 
+});
+
+});
+</script>
+
+
+<form  action="<?php echo $this->getUrl("customer/price/pricelistschedule")?>" name="price_schedule" method="post" class="price_schedule" >
+<ul class="form-list acc_control">
+
+<li class="control">
+<div class="control_radiogroup">
+<input  type="radio" name="buying_pattern_report_val" id="buying_pattern_report_day" value="daily" title="<?php echo $this->__('Enable Buying Pattern') ?>" class="checkbox" />
+<label for="buying_pattern_report_day"><?php echo $this->__('Daily') ?></label>
+</div>
+
+<div class="control_radiogroup">
+<input  type="radio" name="buying_pattern_report_val" id="buying_pattern_report_weekly" value="weekly" title="<?php echo $this->__('Price List Report weekly') ?>" class="checkbox"/>
+<label  for="buying_pattern_report_weekly"><?php echo $this->__('Weekly') ?></label>
+</div>
+
+<div class="control_radiogroup">
+<input  type="radio" name="buying_pattern_report_val" id="buying_pattern_report_monthly" value="monthly" title="<?php echo $this->__('Price List Report monthly') ?>" class="checkbox"/>
+<label  for="buying_pattern_report_monthly"><?php echo $this->__('Monthly') ?></label>
+</div>
+
+<div class="control_radiogroup">
+<input  type="radio" name="buying_pattern_report_val" id="buying_pattern_report_quarter" value="quarter" title="<?php echo $this->__('Price List Report quarter') ?>" class="checkbox"/>
+<label  for="buying_pattern_report_quarter"><?php echo $this->__('Quarterly') ?></label>
+</div>
+
+<!-- <div class="control_radiogroup">
+<input  type="radio" name="buying_pattern_report_val" id="buying_pattern_report_none" value="none" title="<?php echo $this->__('Price List Report none') ?>" class="checkbox"/>
+<label  for="buying_pattern_report_none"><?php echo $this->__('None') ?></label>
+</div>
+-->
+
+</li>
+
+</ul>
+<div class="buttons_container">
+<button type="submit" id="priceklistvalidation" onclick="" title="Update Profile" class="blue_button bor_radius float_r margin_l_r_10"><span><span>
+Save</span></span></button>
+</div>
+</div>
+
+<!--price report cron tab-->

@@ -1,0 +1,80 @@
+<div class="page-title">
+<div class="n_order_h margin_top_30"> <h4><?php  echo $this->__("Order Totals by Season");?></h4></div>
+
+<div class="place_textbtn1">
+	<!--<form method="post" action="http://localhost/Bio/web/mfv/customer/price/downloadPriceList/actionType/download/fileType/csv/">
+		<input type="submit" value="Download" class="blue_button bor_radius Headerbtn">		
+	</form>-->
+	
+	<a  class="quick_buy" href="<?php  echo Mage::getBaseUrl()."history/index/ordertotalseasonpdf"?>"  target="blank"  download="doc.pdf"><?php  echo $this->__("Download pdf")?></a>
+
+</div>
+</div>
+
+   <div class="or_history"> 
+      <table class="blu_table  buyinghistory order_Confirm_table">
+          <?php $currentyear =  date('Y');  //get current value?>
+		  <?php 
+			 $default_year = $this->getDefaultyear();
+             $i=1;
+			 foreach($default_year  as $default_year1)
+			 {
+			   $season =  $default_year1['Season'];
+			 ?>
+			<thead>
+            <tr>
+              <th colspan="2" class="">Flu Season <?php echo $season-1;?>-<?php echo $season;?>
+			  
+		    <?php if($i == 1) { echo " (current) ";}?></th>
+            </tr>
+          </thead>
+
+          <tbody>
+		  <?php  $_data =  $this->seasoncollectiondata($season);?>
+           <?php
+//echo '<pre>';
+//print_r($this->seasoncollectiondata($season));
+            foreach($_data as $_datafield)
+	{
+ ?>
+		   <tr>
+            
+              <td width="50%" class=""><span class="margin_l_40"><?php echo $_datafield['itemNumber']?> - <?php echo $_datafield['prodDesc']?> </span></td>
+              <td class=" "> <span class="margin_l_40"><?php echo number_format($_datafield['qtyOrdered'],0)?> Doses</span></td>
+              
+            </tr>
+              <?php } ?> 
+			<tr>
+            
+              <td class="">  <span class="margin_l_40"></span></td>
+              <td class=" "> <span class="margin_l_40"></span></td>
+              
+            </tr>
+			<?php $priceqty = $this->seasoncollectionqty($season);
+            foreach($priceqty as $_priceqty) { ?>
+            <tr>
+            
+              <td class="bold">  <span class="margin_l_40">Total Quantity</span></td>
+              <td class="bold"><span class="margin_l_40"><?php echo number_format($_priceqty['qtyOrdered'],0)?> Doses</span></td>
+              
+            </tr>
+            
+             <tr>
+            
+              <td class="bold">  <span class="margin_l_40">Total Price</span></td>
+              <td class="bold"><span class="margin_l_40">$<?php echo number_format($_priceqty['priceEach'],0)?></span></td>
+              
+            </tr>
+            <?php } ?>
+            </tbody>
+		<?php $i++;	}
+			 
+			?>
+			
+        </table>
+      
+      
+      </div>
+      
+   </div>
+  </div>	

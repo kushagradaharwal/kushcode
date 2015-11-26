@@ -1,0 +1,270 @@
+<?php
+/*
+order collection Start
+*/
+?>
+<?php 
+$order_data =Mage::registry('filtercollection');
+?>
+
+<div class="title_administration page-title">
+    <h1><?php  echo $this->__("Order History Report");?></h1>
+				
+	<!--<form method="post" action="<?php  //echo Mage::getBaseUrl() ?>buyinghistory_report/index/downloadBuyingHistory/actionType/download/fileType/pdf/">
+		<input type="submit" value="Download PDF" class="blue_button bor_radius Headerbtn">
+	</form>-->
+	<form method="post" action="<?php echo Mage::getBaseUrl() ?>buyinghistory_report/index/downloadBuyingHistory/actionType/download/fileType/csv/">
+		<input type="submit" value="Download CSV" class="blue_button bor_radius Headerbtn">		
+	</form>	
+	<?php
+$url = $_SERVER["REQUEST_URI"];
+
+$url_edit = explode("?",Mage::helper("core/url")->getCurrentUrl());
+$refererUrl = $this->getRequest()->getServer('HTTP_REFERER');
+$referrerUrl = Mage::helper('core/http')->getHttpReferer() ? Mage::helper('core/http')->getHttpReferer()  : Mage::getUrl();
+$paramFound = strpos($referrerUrl, '?');
+
+?>
+	<div  id="statusfilterdiv" >
+<select name="statusfilter" id="statusfilter" onchange="location.href=this.value">
+  <option value="">Status Filter</option>
+  <option value="<?php echo $referrerUrl . ($paramFound > 0 ? '&' : '?') ?>ordered=77">ORDERED</option>
+</select>
+</div>
+
+<div  id="seasonfilterdiv" >
+<select name="seasonfilter" id="seasonfilter" onchange="location.href=this.value">
+   <option value="">Season Filter</option>
+   <!--option value="<?php //echo Mage::getBaseUrl()."buyinghistory_report/index/seasonfilter?year=2015"?>">2015</option-->
+   <!--option value="<?php //echo Mage::getBaseUrl()."buyinghistory_report/index/seasonfilter?year=2014"?>">2014</option-->
+   <option value="<?php echo $referrerUrl . ($paramFound > 0 ? '&' : '?') ?>year=2014">2013-2014</option>
+   <option value="<?php echo $referrerUrl . ($paramFound > 0 ? '&' : '?') ?>year=2015">2014-2015</option>
+</select>
+</div>
+</div>
+
+<div class="buyinghistory-table-wrapper">  
+<table class="buyinghistory-buyinghistory-table blu_table" id="buyinghistory-invoicehistory-table">
+        <thead>
+            <th class="th details-control"></th>
+			<th class="th"><?php echo $this->__('Order'); ?>
+			     <?php 
+				 $currenturl = Mage::helper("core/url")->getCurrentUrl();
+				 if(strstr($currenturl,"desc") && strstr($currenturl,"OAORNO"))
+				 {?>
+				  <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."buyinghistory_report/index/columnfilter/"?>?dir=asc&amp;order=OAORNO">
+                    <i class="fa fa-arrow-down"></i>
+                 </a>
+				 <?php }
+				 
+				 else
+				 {?>
+				   <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."buyinghistory_report/index/columnfilter/"?>?dir=desc&amp;order=OAORNO">
+                    <i class="fa fa-arrow-up"></i>
+                 </a>
+				<?php }
+				?>
+				
+				
+				</th>
+            <th class="th"><?php echo $this->__('PO'); ?>
+                   	
+				<?php	if(strstr($currenturl,"desc") && strstr($currenturl,"OACUOR"))
+				 {?>
+				  <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."buyinghistory_report/index/columnfilter/"?>?dir=asc&amp;order=OACUOR">
+                    <i class="fa fa-arrow-down"></i>
+                 </a>
+				 <?php }
+				 
+				 else
+				 {?>
+				   <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."buyinghistory_report/index/columnfilter/"?>?dir=desc&amp;order=OACUOR">
+                    <i class="fa fa-arrow-up"></i>
+                 </a>
+				<?php }
+				?>
+                </th>
+            <th class="th"><?php echo $this->__('Order Date'); ?>
+                   	
+				<?php	if(strstr($currenturl,"desc") && strstr($currenturl,"OAORDT"))
+				 {?>
+				  <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."buyinghistory_report/index/columnfilter/"?>?dir=asc&amp;order=OAORDT">
+                    <i class="fa fa-arrow-down"></i>
+                 </a>
+				 <?php }
+				 
+				 else
+				 {?>
+				   <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."buyinghistory_report/index/columnfilter/"?>?dir=desc&amp;order=OAORDT">
+                    <i class="fa fa-arrow-up"></i>
+                 </a>
+				<?php }
+				?>
+                </th>
+            <th class="th"><?php echo $this->__('Status'); ?>
+			
+			<?php	if(strstr($currenturl,"desc") && strstr($currenturl,"OAORDT"))
+				 {?>
+				  <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."buyinghistory_report/index/columnfilter/"?>?dir=asc&amp;order=OAORDT">
+                    <i class="fa fa-arrow-down"></i>
+                 </a>
+				 <?php }
+				 
+				 else
+				 {?>
+				   <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."buyinghistory_report/index/columnfilter/"?>?dir=desc&amp;order=OAORDT">
+                    <i class="fa fa-arrow-up"></i>
+                 </a>
+				<?php }
+				?>
+			</th>
+            <th class="th"><?php echo $this->__('FFF Account'); ?>
+			<?php		if(strstr($currenturl,"desc") && strstr($currenturl,"OACUNO"))
+				 {?>
+				  <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."buyinghistory_report/index/columnfilter/"?>?dir=asc&amp;order=OACUNO">
+                    <i class="fa fa-arrow-down"></i>
+                 </a>
+				 <?php }
+				 
+				 else
+				 {?>
+				   <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."buyinghistory_report/index/columnfilter/"?>?dir=desc&amp;order=OACUNO">
+                    <i class="fa fa-arrow-up"></i>
+                 </a>
+				<?php }
+				?>
+			</th>
+
+			<th class="th"><?php echo $this->__('Item'); ?>
+			<?php	if(strstr($currenturl,"desc") && strstr($currenturl,"OBITNO"))
+				 {?>
+				  <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."buyinghistory_report/index/columnfilter/"?>?dir=asc&amp;order=OBITNO">
+                    <i class="fa fa-arrow-down"></i>
+                 </a>
+				 <?php }
+				 
+				 else
+				 {?>
+				   <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."buyinghistory_report/index/columnfilter/"?>?dir=desc&amp;order=OBITNO">
+                    <i class="fa fa-arrow-up"></i>
+                 </a>
+				<?php }
+				?>
+			</th>
+	    	<th style="th"><?php echo $this->__('Req Del Date')?>
+			<?php	if(strstr($currenturl,"desc") && strstr($currenturl,"OBFDED"))
+				 {?>
+				  <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."buyinghistory_report/index/columnfilter/"?>?dir=asc&amp;order=OBFDED">
+                    <i class="fa fa-arrow-down"></i>
+                 </a>
+				 <?php }
+				 
+				 else
+				 {?>
+				   <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."buyinghistory_report/index/columnfilter/"?>?dir=desc&amp;order=OBFDED">
+                    <i class="fa fa-arrow-up"></i>
+                 </a>
+				<?php }
+				?>
+			</th>
+	    	<th style="th"><?php echo $this->__('Order Qty')?>
+                    
+					
+				<?php	if(strstr($currenturl,"desc") && strstr($currenturl,"OBORQT"))
+				 {?>
+				  <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."buyinghistory_report/index/columnfilter/"?>?dir=asc&amp;order=OBORQT">
+                    <i class="fa fa-arrow-down"></i>
+                 </a>
+				 <?php }
+				 
+				 else
+				 {?>
+				   <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."buyinghistory_report/index/columnfilter/"?>?dir=desc&amp;order=OBORQT">
+                    <i class="fa fa-arrow-up"></i>
+                 </a>
+				<?php }
+				?>
+					</th>
+			<th style="th"><?php echo $this->__('Price')?>		
+		    <?php	if(strstr($currenturl,"desc") && strstr($currenturl,"OBNEPR"))
+				 {?>
+				  <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."buyinghistory_report/index/columnfilter/"?>?dir=asc&amp;order=OBNEPR">
+                    <i class="fa fa-arrow-down"></i>
+                 </a>
+				 <?php }
+				 
+				 else
+				 {?>
+				   <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."buyinghistory_report/index/columnfilter/"?>?dir=desc&amp;order=OBNEPR">
+                    <i class="fa fa-arrow-up"></i>
+                 </a>
+				<?php }
+				?>
+			</th>
+			
+			<th style="th"><?php echo $this->__('Total')?>	
+			<?php	if(strstr($currenturl,"desc") && strstr($currenturl,"OBLNA2"))
+				 {?>
+				  <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."buyinghistory_report/index/columnfilter/"?>?dir=asc&amp;order=OBLNA2">
+                    <i class="fa fa-arrow-down"></i>
+                 </a>
+				 <?php }
+				 
+				 else
+				 {?>
+				   <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."buyinghistory_report/index/columnfilter/"?>?dir=desc&amp;order=OBLNA2">
+                    <i class="fa fa-arrow-up"></i>
+                 </a>
+				<?php }
+				?>
+			</th>
+        </thead>
+   
+   <?php if(count($order_data) > 0): ?>
+   
+   <tbody>
+   <?php  foreach($order_data as $order_data_field):?>
+        <tr>
+		    <td><?php echo $order_data_field["orderNumber"]; ?></td>
+			<td><?php echo $order_data_field["poNumber"]; ?></td>
+		<td><?php
+                $order_data_date =  Mage::helper('core')->formatDate($order_data_field["orderDate"], Mage_Core_Model_Locale::FORMAT_TYPE_SHORT, false);
+			echo $order_data_date; ?></td>
+			<td><?php echo $order_data_field["orderStatus"]; ?></td>
+			<td><?php echo $order_data_field["accountNumber"]; ?></td>
+
+			<td><?php echo $order_data_field["prodDesc"]; ?></td>
+			<td><?php 
+			 $order_data_deliverdate = Mage::helper('core')->formatDate($order_data_field["deliveryDate"], Mage_Core_Model_Locale::FORMAT_TYPE_SHORT, false);
+			echo $order_data_deliverdate; ?></td>
+			<td><?php echo $order_data_field["qtyOrdered"]; ?></td>
+			<td><?php echo $order_data_field["priceEach"]; ?></td>
+			<td><?php echo $order_data_field["lineTotal"]; ?></td>
+		</tr>
+	<?php endforeach;?>	
+     </tbody>
+   
+   <?php else:?>
+   <tbody>
+
+
+   </tbody>
+<?php endif;?>
+
+
+<style>
+.th.details-control{ display:none;}
+.layout.layout-1-col select#statusfilter {
+    line-height: 17%;
+    padding: 0.5%;
+    width: 19%;
+}
+</style>
+</table>
+</div>
+
+<?php
+/*
+order collection end
+*/
+?>

@@ -1,0 +1,100 @@
+<div class="page-title">
+<?php
+
+header("Content-Type: application/octet-stream");
+$writehtml = Mage::getBaseDir('lib')."/pdf/";
+require($writehtml.'html_table.php');
+$pdf=new PDF();
+		
+$pdf->AddPage();
+//$pdf->Image('http://localhost/Bio/web/skin/frontend/mfv/fff/images/logo.gif',18,13,33);
+$pdf->SetFont('helvetica','B',10);
+
+$html.='<table>
+<tr bgcolor="#e6f7ff" >';
+
+
+$default_year = $this->getDefaultyear();
+             $i=1;
+			 foreach($default_year  as $default_year1)
+			 {
+			   $html .='<td width="700" height="50" bgcolor="#e6f7ff" >';
+			   $season =  $default_year1['Season'];
+			   $html .= "Flu Season ";
+			   $html .=	$season;
+	$html .=			  '-';
+	$html .= $season+1;
+			  
+		    if($i ==1) {
+	$html .= " (current) ";
+			}
+	$html	   .= '</td>
+</tr>
+<tr></tr>
+</table>';
+
+  $_data =  $this->seasoncollectiondata($season);
+  foreach($_data as $_datafield)
+	{	
+	
+$html .= '<table>
+<tr bgcolor="#e6f7ff" >
+<td width="570" height="30" >';
+ 
+ $html .= '            ';
+ $html .= $_datafield['itemNumber'].' - ';
+  $html .= $_datafield['prodDesc']; 
+   $html .= '</td>
+   
+<td width="200" height="30">';
+ $html .= number_format($_datafield['qtyOrdered'],0);
+  $html .= ' Doses</td>
+</tr>
+<tr><td width="570" height="10" ></td></tr>
+</table>';
+}
+
+	$priceqty = $this->seasoncollectionqty($season);
+         foreach($priceqty as $_priceqty) {
+		 
+$html .= '<table>
+<tr><td width="570" height="50" >  </td><td width="610" height="50" >  </td></tr>
+<tr bgcolor="#e6f7ff" >
+<td width="570" height="30" >           Total Quantity </td>
+<td width="200" height="30">';  
+
+$html .=number_format($_priceqty['qtyOrdered'],0); 
+
+$html .= ' Doses</td>
+</tr>
+<tr bgcolor="#e6f7ff" >
+<td width="570" height="30" >           Total Price </td>
+<td width="200" height="30"> $';
+
+$html .=number_format($_priceqty['priceEach'],0);
+$html .= '</td>
+</tr>
+<tr><td width="610" height="50" >  </td><td width="610" height="50" >  </td></tr>
+</table>';
+}
+   $i++;	
+   
+   }
+   
+$pdf->WriteHTML($html1."<br>");
+
+$pdf->SetFont('helvetica','',9);
+$pdf->WriteHTML($html);
+
+$pdf->SetFont('helvetica','B',10);
+
+$pdf->WriteHTML($html2);
+
+
+  
+  
+ob_end_clean();
+$pdf->Output("season.pdf","D"); 
+
+//$pdf->Output(); 
+?>

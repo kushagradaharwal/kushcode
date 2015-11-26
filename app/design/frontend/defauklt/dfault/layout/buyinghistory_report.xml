@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	<history_index_index>
+		<reference name="head">
+			  			<action method="addItem"><type>skin_css</type><name>css/biosupply/group/reportbuy.css</name></action>
+    	</reference>
+		<reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="history/buying_history_report" name="buyinghistory.report" template="buyinghistory/buying/history/report.phtml"/>
+		</reference>
+	</history_index_index>
+	
+	<history_index_statusfilter>
+	
+		<reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="history/report" name="buyinghistory.history" template="buyinghistory/history.phtml"/>
+		</reference>
+	</history_index_statusfilter>
+	
+		
+	<history_index_seasonfilter>
+	
+		<reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+        </reference>
+        <reference name="content">
+                 <block type="history/buying_history_report" name="buyinghistory.report" template="buyinghistory/buying/history/report.phtml"/>
+		</reference>
+	</history_index_seasonfilter>
+	
+  <history_index_columnfilter>
+	 <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="history/report" name="buyinghistory.history" template="buyinghistory/history.phtml"/>
+		</reference>
+	</history_index_columnfilter>
+	
+	 <history_index_ordertotalseason>
+	
+		<reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="history/orderseason" name="buyinghistory.history.orderseason" template="buyinghistory/orderseason.phtml"/>
+		</reference>
+	</history_index_ordertotalseason>
+	
+		
+     <history_index_ordertotalseasonpdf>
+	
+		<reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="history/orderseason" name="history.history.orderseason" template="buyinghistory/orderseasonpdf.phtml"/>
+		</reference>
+	</history_index_ordertotalseasonpdf>
+	
+</layout> 

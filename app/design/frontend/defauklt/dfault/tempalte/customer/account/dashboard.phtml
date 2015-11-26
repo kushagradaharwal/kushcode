@@ -1,0 +1,493 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     enterprise_default
+ * @copyright   Copyright (c) 2014 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+?>
+
+<?php
+
+
+$customer = Mage::getSingleton('customer/session')->getCustomer();
+$customerId = $customer->getId();
+$collection=Mage::getModel('customeraccount/customeraccount')->lastthreeaccounts($customerId);
+$default_customeraccount = Mage::helper('customeraccount/customer')->getDefaultCustomeraccount($customer);
+if ($default_customeraccount !='') {
+$acctNumber = $default_customeraccount->getAccountNumber();
+$customer_type = Mage::helper('customeraccount/customer')->getCustomerType($acctNumber);
+$address = $customer->getPrimaryShippingAddress();
+
+///////////////For getting GPO///////////////////
+
+	$conn = Mage::helper('m3connection')->getM3Connection();
+			$sql = "SELECT OKDISY as gponame FROM M3ePRD.OCUSMA WHERE OKCONO = 1 AND OKCUNO = '$acctNumber'";
+			$stmt = $conn->query($sql);			
+			$ResultGpo = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			$GPOName = '';
+			foreach($ResultGpo as $Key=>$val){
+				$GPOName = $val['gponame'];
+				if($GPOName){
+					break;
+				}
+			}
+		
+//////////////END For GPO CODE//
+
+//$addr = $this->getLayout()->createBlock('customer/account_dashboard_address');
+//$shippingAddress = $addr->getPrimaryShippingAddressHtml();
+
+//	For marketing posters in dashboard
+//$bottomLeftBanner = Mage::helper('newpromotions/data')->getData('bottomleft');
+//$bottomRightBanner = Mage::helper('newpromotions/data')->getData('bottomright');
+// to overcome current media url structure
+	$imgUrl=Mage::getBaseUrl();
+	if($imgUrl=='http://192.168.2.193/mfv/')
+	$imgUrl ='http://192.168.2.193/';
+
+/*###################################################################################################################################*/
+/* If Customer Group - Employee Then Internal Design Else External Design */
+/*###################################################################################################################################*/
+
+$CustomerGrpName = Mage::getModel('customer/group')->load($customer->getGroupId())->getCustomerGroupCode(); 
+if(strtolower($CustomerGrpName) != "employee"){
+		/* ################################ START of External Dashboard Design ################################################ */
+	
+	/* Blue Welcome Header  is coming from header page */  
+
+	
+	?>
+<div class=" no_baground">	
+	<div class="internal_user " style="   margin-top: 35px;"> 
+                <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+		<!-- Left Main Block -->
+		<div class="mfv_user_box my_account float_l"> 
+		<!--<div class="mfv_edit_btn"><a href="#"><img alt="Edit button" src="<?php //echo $this->getSkinUrl().'images/mfv_edit.png' ?>"></a> </div>-->
+		<div class="n_order_h">My Account</div>
+		<p class="graytext_13 font_15 margin_bot_20">Lorem Ipsum is simply dummy text of the printing and 
+		typesetting industry.Lorem Ipsum has been the industry's 
+		sstandard dummy text ever since. </p>
+		<div class="billing_and_shipping_box"> 
+		<div class="billing_add"> 
+		<div class="bill_img"><img src="<?php echo $this->getSkinUrl().'images/billing_ad.png' ?>">  </div>
+		<div class="bill_content"> 
+		<p class="bluetext_13 font_15 bold"> Billing Address </p>
+		<?php
+		$DefaultBillingData = $customer->getPrimaryBillingAddress();
+		$BillingAddress = $DefaultBillingData['street'][0]." ".$DefaultBillingData['street'][1]
+		."<br>".$DefaultBillingData['city']." ,".$DefaultBillingData['region']." ".$DefaultBillingData['postcode']; ?>
+		<p class="graytext_13 font_15"><?php echo $BillingAddress ?></p>
+		</div>
+		</div>
+    
+		<div class="shipping_add"> 
+		<div class="shipping_img"><img src="<?php echo $this->getSkinUrl().'images/shipping_ad.png' ?>">  </div>
+		<div class="shipping_img_content "> 
+	   <p class="bluetext_13 font_15 bold">Shipping Address</p>
+		<?php 					
+			$DefaultShippingData = $customer->getPrimaryShippingAddress();
+			$ShippingAddress = $DefaultShippingData['street'][0]." ".$DefaultShippingData['street'][1]
+		."<br>".$DefaultShippingData['city']." ,".$DefaultShippingData['region']." ".$DefaultShippingData['postcode']; ?>
+	   <p class="graytext_13 font_15"><?php echo $ShippingAddress ?></p>
+		</div>
+		</div>
+ 
+ 
+		</div>
+ 
+<div class="clr_both"> </div>
+ </div>
+
+	<!-- Right Main Block -->
+		<div class="massage mfv_user_box "> 
+		<div class="n_order_h">Messages</div>
+		<?php  echo $this->getLayout()->createBlock('core/template')->setTemplate('messagecenter/messagecenter.phtml')->toHtml()  ?>
+		</div> 
+				
+	<!-- Bottom 2 promotional Banner  Block -->	
+				<div class="internal_user">  
+					<div class="marketing_posters1">
+					<?php 
+					if(!empty($bottomLeftBanner) )
+					{
+					?>
+						<a href="<?php echo $bottomLeftBanner['bannerLink']; ?>">
+						<img width="100%" style="border-radius=0px !important; "  alt="<?php echo $bottomLeftBanner['altText']; ?>" src="<?php echo $imgUrl.'media/'.$bottomLeftBanner['bannerImg']; ?>" />
+						<a/>
+					<?php
+					}
+					else
+					{
+					?>
+					<img width="100%" style="border-radius=0px !important; "  src="<?php echo $this->getSkinUrl('images/bottomPlaceholder.png'); ?>" />
+					<?php
+					}
+					?>
+					</div>
+					<div class="marketing_posters2">
+					<?php 
+					if(!empty($bottomRightBanner) )
+					{
+					?>
+					<a href="<?php echo $bottomRightBanner['bannerLink']; ?>">
+					<img width="100%" style="border-radius=0px !important; "  alt="<?php echo $bottomRightBanner['altText']; ?>" src="<?php echo $imgUrl.'media/'.$bottomRightBanner['bannerImg']; ?>" />
+					<a/>
+					<?php
+					}
+					else
+					{
+					?>
+					<img width="100%" style="border-radius=0px !important; "  src="<?php echo $this->getSkinUrl('images/bottomPlaceholder.png'); ?>" />
+					<?php
+					}
+					?>
+					</div>
+				</div>
+	</div> 
+
+
+		<!--<div class="product_value_boxes">
+
+		<ul class="p_v_box"> 
+		<li> 
+		<div class="w_round"><span>53</span></div>
+		<div class="w_round_content">Total # of specialty products ordered</div>
+		</li>
+
+		<li> 
+		<div class="w_round"><span>237</span></div>
+		<div class="w_round_content">Total # of new accounts this quarter</div>
+		</li>
+
+		<li> 
+		<div class="w_round"><span>700</span></div>
+		<div class="w_round_content">Total # of customers</div>
+		</li>
+
+		<li> 
+		<div class="w_round"><span>12K</span></div>
+		<div class="w_round_content">Total price of open orders</div>
+		</li>
+
+		</ul>
+
+		</div>-->
+	</div>
+	<div class="clr_both"> </div>
+	<?php
+	
+	/* ################################ END of External Dashboard Design ################################################ */
+	
+}else{
+	
+/* ################################ START of Internal Dashboard Design ################################################ */
+	
+	?>
+	<div class="main-content" style=" margin-top:45px">
+		<div class="no_baground">        
+		<!-- <div class="page-title"> <h1><?php echo $this->__('Dashboard') ?></h1>   </div> -->
+		<!-- Main Block -->
+		<div class="internal_user"> 
+                                <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+				<!-- Left  Main Block -->
+				<div class="new_order"> 
+				<!--<div class="mfv_edit_btn"><a href="#"><img alt="Edit button" src="<?php //echo $this->getSkinUrl().'images/mfv_edit.png' ?>"></a> </div>-->
+					<div class="n_order_h">New Order</div>
+					<div  class="n_order_s_account">
+						<div> Recently Accessed</div> 
+						<a href="<?php echo Mage::getBaseUrl().'accounts'?>" alt="Swtich Account" >Change</a>
+					</div>
+					<div class="gray_box"> <div id="accounts">
+						<?php if(isset($collection)){?>
+					<a id="overflow" style="position: absolute; right: 30px; margin-top: 20px;"><img src="<?php echo $this->getSkinUrl('images/sort_desc.png') ?>"  title="<?php echo $this->__('last 3 account') ?>" /></a> <?php } ?>
+						<table> 						
+							<tr> 
+							<td><?php echo $default_customeraccount->getAccountNumber() ?></td>
+							<td></td>
+							</tr>						
+							<tr> 
+							<td><?php echo $default_customeraccount->getName() ?></td>
+							<td></td>
+							</tr>	
+						
+						<?php if(isset($collection)){?>
+						
+								<?php foreach($collection as $coll){
+$newcollection=Mage::getModel('customeraccount/customeraccount')->getCollection()->addFieldToSelect(array('account_number','name'))->addFieldToFilter('id',$coll['customeraccount_id']);
+			?>
+						<?php foreach($newcollection as $collect){					
+						?> 	
+								<tr class="tr-disable"> 
+								<td><?php echo  $collect['account_number'] ?></td>
+								</tr>						 
+								<tr class="tr-disable"> 
+								<td><?php echo  $collect['name'] ?></td>					
+								</tr>					
+							<?php  
+								}
+								?>
+								
+							<?php } ?>
+						
+						<?php } ?>	
+													
+						</table>
+						</div> 
+							</div>
+					 
+					<?php if ($customer_type =='Payer') : ?>
+					<div class="alert alert-info" role="alert">
+						This is a payer account and is not authorized to place orders.
+					</div>
+					<?php else :?>
+					<div class="place_buttons">	
+						<a class="blue_button bor_radius float_l" href="<?php echo Mage::getBaseUrl(); ?>product-catalog">Place Order</a>
+						<a class="blue_button bor_radius float_r" href="<?php echo Mage::getBaseUrl().'filetocart/customer/form/'; ?>">Upload order</a>
+					
+					</div>
+					<?php endif; ?>
+					<div class="gpochk">
+						<div  class="u_d_part2"> 
+							<div class="provider_id">GPO</div>
+								<a href="<?php echo Mage::getBaseUrl().'filetocart/customer/download/'; ?>" class="download_order dwnld_sping" style="margin-top:-23px;">Download Order Format</a>
+							<div class="provider_text"><?php echo $GPOName  ?></div>
+						</div>
+		<!-- Billing & Shipping Address-->	
+
+		<div class="user_Address_table">
+				 <div class="u_a_part1">
+				 <h2>Billing Address</h2> 
+				 <?php
+				$DefaultBillingData = $customer->getPrimaryBillingAddress();
+				$BillingAddress = $DefaultBillingData['street'][0]." ".$DefaultBillingData['street'][1]
+				."<br>".$DefaultBillingData['city']." ,".$DefaultBillingData['region']." ".$DefaultBillingData['postcode']; ?>
+				 <div class="bill_address"><?php echo $BillingAddress ?></div>
+				  </div>
+				 <div class="u_a_part2"> 
+				 <h2>Shipping Address</h2> 
+				 <?php 					
+				$DefaultShippingData = $customer->getPrimaryShippingAddress();
+				$ShippingAddress = $DefaultShippingData['street'][0]." ".$DefaultShippingData['street'][1]
+				."<br>".$DefaultShippingData['city']." ,".$DefaultShippingData['region']." ".$DefaultShippingData['postcode']; ?>
+				 <div class="bill_address"><?php echo $ShippingAddress ?></div>
+				 </div>
+			
+		</div>	
+		</div>
+</div>		
+				<!-- Right  Main Block -->
+				<div class="massage">
+					<div class="n_order_h">Messages</div>
+					<?php  echo $this->getLayout()->createBlock('core/template')->setTemplate('messagecenter/messagecenter.phtml')->toHtml()  ?>
+				</div> 
+				
+					<!-- Bottom 2 promotional Banner  Block -->	
+				<div class="internal_user">  
+					<div class="marketing_posters1">
+					<?php 
+					if(!empty($bottomLeftBanner) )
+					{
+					?>
+						<a href="<?php echo $bottomLeftBanner['bannerLink']; ?>">
+						<img width="100%" style="border-radius=0px !important; "  alt="<?php echo $bottomLeftBanner['altText']; ?>" src="<?php echo $imgUrl.'media/'.$bottomLeftBanner['bannerImg']; ?>" />
+						<a/>
+					<?php
+					}
+					else
+					{
+					?>
+					<img width="100%" style="border-radius=0px !important; "  src="<?php echo $this->getSkinUrl('images/bottomPlaceholder.png'); ?>" />
+					<?php
+					}
+					?>
+					</div>
+					<div class="marketing_posters2">
+					<?php 
+					if(!empty($bottomRightBanner) )
+					{
+					?>
+					<a href="<?php echo $bottomRightBanner['bannerLink']; ?>">
+					<img width="100%" style="border-radius=0px !important; "  alt="<?php echo $bottomRightBanner['altText']; ?>" src="<?php echo $imgUrl.'media/'.$bottomRightBanner['bannerImg']; ?>" />
+					<a/>
+					<?php
+					}
+					else
+					{
+					?>
+					<img width="100%" style="border-radius=0px !important; "  src="<?php echo $this->getSkinUrl('images/bottomPlaceholder.png'); ?>" />
+					<?php
+					}
+					?>
+					</div>
+				</div>
+
+		</div>
+	</div>
+    <div class="clr_both"> </div> <?php
+	
+	/* ################################ END of Internal Dashboard Design ################################################ */
+	
+}
+?>    
+</div>
+
+
+<script type="text/javascript"> 
+
+	jQuery(".main-content .container").addClass("no_baground");
+	jQuery(".main-content .container").addClass("no_padding");
+	//alert("vvv");
+	//jQuery(".no_bg").addClass("no_baground");
+</script>
+
+
+<!-- ############################################################################################################################################ -->
+<!--######################################################  Below is Old Design Code  #########################################################-->
+<!-- ############################################################################################################################################ -->
+
+
+<!-- ----------------------------------------
+    <div class="page-title">
+        <h1><?php echo $this->__('Dashboard') ?></h1>
+        <div class="customer-account-number">
+            <strong>Current account:</strong> <span class="label"><?php echo $default_customeraccount->getAccountNumber() ?></span> &nbsp;&nbsp; <a href="/accounts"><span class="btn btn-icon-round20"><i class="fa fa-pencil-square-o"></i></span></a>
+        </div>
+        <div style="float:right;">
+            <?php
+            if ($customer_type =='Payer') : ?>
+                <div class="alert alert-info" role="alert">
+                    This is a payer account and is not authorized to place orders.
+                </div>
+            <?php else :?>
+                <a href="<?php echo Mage::getBaseUrl(); ?>product-catalog" class="btn btn-info btn-lg">Order Here</a>
+            <?php endif; ?>
+        </div>
+    </div>
+	
+		
+		<div class="col-1 col-sm-7">
+			<?php echo $this->getChildHtml('address') ?>
+		</div>	
+	
+	
+    <div class="sub-title">
+        <h3>Support Team</h3>
+        <span>(for Account  <?php echo trim($default_customeraccount->getAccountNumber()) ?>)</span>
+    </div>
+    <div class="row" style="border-radius:20px;background:#EFF3F4;padding:30px;">
+        <?php
+            //get the sales persons information from magento
+            $sdr_id = Mage::getModel('customer/customer')->getCustomer('sdr_id');
+        // print $sdr_id;
+            $sdr_employee = Mage::helper('customcustomer/data')->getFFFsmcd($sdr_id);
+            //get the sdep persons information from magento
+            $sdep_id = Mage::getModel('customer/customer')->getCustomer('SDEP');
+        //print $sdep_id;
+            $sdep_employee = Mage::helper('customcustomer/data')->getFFFsdep($sdep_id);
+            //get the TM information from magento
+            $tm_id = Mage::getModel('customer/customer')->getCustomer('BUAR');
+            $tm_employee = Mage::helper('customcustomer/data')->getFFFbuar($tm_id);
+        //print $tm_id;
+            //should tm be visible?
+            if (($sdr_employee->email == $tm_employee->email) || ($sdep_employee->email == $tm_employee->email)){
+                $tm_hidden = 'hidden';
+            }
+            //should sdep be visible
+            if (($sdr_employee->email == $sdep_employee->email) || ($tm_employee->email == $sdep_employee->email)){
+                $sdep_hidden = 'hidden';
+            }
+            if (($tm_hidden == 'hidden') && ($sdep_hidden == 'hidden')) {
+                $spacing = 12;
+            }elseif (($tm_hidden == 'hidden') || ($sdep_hidden == 'hidden')) {
+                $spacing = 6;
+            }else{
+                $spacing = 4;
+            }
+        ?>
+
+        <div class="col-sm-<?php echo $spacing; ?>">
+            <div style="margin-bottom:10px;">
+                <img src="<?php echo Mage::getBaseUrl().'media/customer'.$sdr_employee->profile_pic; ?>">
+            </div>
+            <?php echo $sdr_employee->customer_title ; ?><br/>
+            <span style="font-weight:700;"><?php echo $sdr_employee->firstname. ' '.$sdr_employee->lastname; ?></span><br>
+            <span style=""><?php echo $sdr_employee->customer_phone; ?></span><br>
+            <span>
+                <a href="mailto:<?php echo $sdr_employee->email;?>"><?php echo $sdr_employee->email;?></a>
+            </span>
+        </div>
+        <div class="col-sm-<?php echo $spacing; ?> <?php if(isset($sdep_hidden)){echo $sdep_hidden;} ?>">
+            <div style="margin-bottom:10px;">
+                <img src="<?php echo Mage::getBaseUrl().'media/customer'.$sdep_employee->profile_pic; ?>">
+            </div>
+            <?php echo $sdep_employee->customer_title ; ?><br/>
+            <span style="font-weight:700;"><?php echo $sdep_employee->firstname. ' '.$sdep_employee->lastname; ?></span><br>
+            <span style=""><?php echo $sdep_employee->customer_phone; ?></span><br>
+            <span>
+                <a href="mailto:<?php echo $sdep_employee->email;?>"><?php echo $sdep_employee->email;?></a>
+            </span>
+        </div>
+        <div class="col-sm-<?php echo $spacing; ?> <?php if(isset($tm_hidden)){echo $tm_hidden;} ?>">
+            <div style="margin-bottom:10px;">
+                <img src="<?php echo Mage::getBaseUrl().'media/customer'.$tm_employee->profile_pic; ?>">
+            </div>
+            <?php echo $tm_employee->customer_title; ?><br/>
+            <span style="font-weight:700;"><?php echo $tm_employee->firstname. ' '.$tm_employee->lastname; ?></span><br>
+            <span style=""><?php echo $tm_employee->customer_phone; ?></span><br>
+            <span>
+                <a href="mailto:<?php echo $tm_employee->email;?>"><?php echo $tm_employee->email;?></a>
+            </span>
+        </div>
+    </div> -->
+    
+    <?php /***
+    <div class="page-title">
+        <h1><?php echo $this->__('My Dashboard') ?></h1>
+    </div>
+    <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+    <?php echo $this->getChildHtml('hello') ?>
+    <?php echo $this->getChildHtml('top') ?>
+    <h2 class="sub-title"><?php echo $this->__('Account Information') ?></h2>
+    **/ ?>
+    <?php /* Extensions placeholder */ ?>
+    <?php /**
+    <?php echo $this->getChildHtml('customer.account.dashboard.extra') ?>
+    <?php echo $this->getChildHtml('info') ?>
+    <?php echo $this->getChildHtml('address') ?>
+    <?php echo $this->getChildHtml('info1') ?>
+    <?php echo $this->getChildHtml('info2') ?>
+    **/ ?>
+</div>
+
+<?php } else{
+ echo'You must select a customer account to continue.';
+} ?>
+<script>
+jQuery(document).ready(function(){
+jQuery('.gpochk').show();
+jQuery('.tr-disable').hide();
+jQuery("#overflow").click( function(){
+jQuery('.tr-disable').toggle();
+jQuery('.gpochk').toggle();
+});
+});
+</script>

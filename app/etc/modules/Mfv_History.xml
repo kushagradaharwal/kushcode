@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Mfv_History>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Mfv_History>
+    </modules>
+</config> 

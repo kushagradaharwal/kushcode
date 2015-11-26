@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<modules>
+		<Biosupply_Report>
+			<version>0.1.0</version>
+		</Biosupply_Report>
+	</modules>
+	
+ 	<crontab>
+	  <jobs>
+	    <biovisionreport_daily>
+		 <schedule><cron_expr>0 0 * * *</cron_expr></schedule>
+                <run>
+					<model>report/observer::sendBiovisionreportdaily</model>
+				</run>
+	    </biovisionreport_daily>
+		
+		<biovisionreport_weekly>
+		 <schedule><cron_expr>0 0 * * 1</cron_expr></schedule>
+                <run>
+					<model>report/observer::sendBiovisionreportweekly</model>
+				</run>
+	    </biovisionreport_weekly>
+		
+		<biovisionreport_monthly>
+		 <schedule><cron_expr>0 0 1 * *</cron_expr></schedule>
+                <run>
+					<model>report/observer::sendBiovisionreportmonthly</model>
+				</run>
+	    </biovisionreport_monthly>
+		
+		<biovisionreport_quarterly>
+		 <schedule><cron_expr>0 0 1 1,4,7,10 *</cron_expr></schedule>
+                <run>
+					<model>report/observer::sendbiovisionreportquarterly</model>
+				</run>
+	    </biovisionreport_quarterly>
+	  </jobs>
+	</crontab>
+	<frontend>
+		<routers>
+			<report>
+				<use>standard</use>
+				<args>
+					<module>Biosupply_Report</module>
+					<frontName>bio_report</frontName>
+				</args>
+			</report>
+		</routers>
+		<layout>
+			<updates>
+				<report>
+					<file>biosupply_report.xml</file>
+				</report>
+			</updates>
+		</layout>
+		<events>
+			<customer_customer_authenticated>
+				<observers>
+					<bio_report>
+						<type>singleton</type>
+                        <class>bio_report/observer</class>
+                        <method>loadCustomerNumber</method>
+					</bio_report>
+				</observers>
+			</customer_customer_authenticated>
+		</events>
+	</frontend>
+	<global>
+	<models>
+            <report>
+                <class>Biosupply_Report_Model</class>
+                <resourceModel>report_mysql4</resourceModel>
+			</report>
+            <report_mysql4>
+                <class>Biosupply_Report_Model_Mysql4</class>
+                <entities>
+                    <report>
+                        <table>bioreport</table>
+                    </report>
+                </entities>
+            </report_mysql4>
+       </models>
+	   <resources>
+            <report_setup>
+                <setup>
+                    <module>Biosupply_Report</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </report_setup>
+            <report_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </report_write>
+            <report_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </report_read>
+        </resources>
+		
+		<helpers>
+			<bio_report>
+				<class>Biosupply_Report_Helper</class>
+			</bio_report>
+		</helpers>
+		<blocks>
+			<bio_report>
+				<class>Biosupply_Report_Block</class>
+			</bio_report>
+		</blocks>
+	</global>
+</config>

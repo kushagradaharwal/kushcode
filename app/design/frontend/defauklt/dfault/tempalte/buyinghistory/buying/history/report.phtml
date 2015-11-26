@@ -1,0 +1,456 @@
+
+<?php
+/*
+order collection Start
+*/
+?>
+<?php 
+$order_data = $this->getOrderHistory();
+?>
+<div class="title_administration page-title">
+    <h1><?php  echo $this->__("Order History Report");?></h1>
+				
+	<!--<form method="post" action="http://localhost/Bio/web/mfv/customer/price/downloadPriceList/actionType/download/">
+		<input type="submit" value="Download PDF" class="blue_button bor_radius Headerbtn">
+	</form>-->
+		<form method="post" action="<?php echo Mage::getBaseUrl() ?>history/index/downloadhistory/actionType/download/fileType/csv/">
+         <input type="hidden" value="<?php echo $_GET['ordered'];?>" name="paramcsvordered" />
+        <input type="hidden" value="<?php echo $_GET['year'];?>" name="paramcsvyear" />
+	    <input type="hidden" value="<?php echo $_GET['dir'];?>" name="paramcsvdir" />
+	    <input type="hidden" value="<?php echo $_GET['order'];?>" name="paramcsvorder" />
+		<input type="submit" value="Download CSV" class="blue_button bor_radius Headerbtn">
+        <input type="hidden" value="<?php echo Mage::helper("core/url")->getCurrentUrl();?>" name="paramcsv" />
+	</form>	
+<?php
+$refererUrl = $this->getRequest()->getServer('HTTP_REFERER');
+$referrerUrl = Mage::helper('core/http')->getHttpReferer() ? Mage::helper('core/http')->getHttpReferer()  : Mage::getUrl();
+$paramFound = strpos($referrerUrl, '?');
+?>
+</div>
+
+<?php
+$moduleurl =  Mage::helper("core/url")->getCurrentUrl();
+//$_referurl = "/?year";
+//$paramFound = strpos($referrerUrl, '?');
+$curr_url = Mage::helper("core/url")->getCurrentUrl();
+$paramFoundfirsttime = strpos($curr_url, 'seasonfilter');
+if($paramFoundfirsttime)
+{
+//echo  "yes";
+}
+else
+{
+ //echo  "no";
+}
+?>
+
+<?php 
+ $paramFoundreferlurl = strpos($referrerUrl, 'seasonfilter');
+ if(!$paramFoundreferlurl )
+ {
+ $referrerUrl =  $referrerUrl.'seasonfilter/';
+ }
+ ?>
+<div  id="statusfilterdiv" >
+<select name="statusfilter" id="statusfilter" onchange="location.href=this.value">
+<?php if(isset($_GET['year'])){
+             $orderstringdefault=  $_GET['year'];
+			 }
+?>			 
+  <option value="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?><?php if(strpos($moduleurl, 'year')) { echo "?year=".$orderstringdefault ; } ?><?php if(isset($_GET['dir'])  || isset($_GET['order']) ){ echo "&dir=".$_GET['dir']."&order=".$_GET['order'];}?>">Status Filter</option>
+  <!--<option value="<?php  //echo $referrerUrl."history/index/statusfilter/". ($paramFound > 0 ? '&' : '?') ?>ordered=77">ORDERED</option>-->
+   <!-- <option value="<?php  //echo $referrerUrl."history/index/statusfilter/". ($paramFound > 0 ? '&' : '?') ?>ordered=77">ORDERED</option>-->
+	
+	<?php  /*if($paramFoundfirsttime > 0){ ?>
+	   <?php if(isset($_GET['year'])){
+             $orderstringstatus1 .=  $_GET['year'];
+			 }
+			// if(isset($_GET['dir'])  || isset($_GET['order']) ){ echo  $_GET['dir'];echo  $_GET['order'];}
+			 
+			 
+			// echo  $orderstring ;
+   ?> 
+   <?php  removed in tmp basis
+	<option value="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?>?ordered=20<?php if(strpos($moduleurl, 'year')) { echo "&year=".$orderstringstatus1 ; } ?><?php if(isset($_GET['dir'])  || isset($_GET['order']) ){ echo "&dir=".$_GET['dir']."&order=".$_GET['order'];}?>"<?php if($_GET['ordered'] == "20"):?> selected <?php endif;?>>Backorder</option>
+	<?php  }else{?>
+    <option value="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?>?ordered=20"  <?php if($_GET['ordered'] == "20"):?>selected<?php endif;?>>Backorder</option>
+	<?php }?>
+   <?php */?>	
+	
+  <?php if($paramFoundfirsttime > 0){ ?>
+     <?php if(isset($_GET['year'])){
+             $orderstringstatus2 .=  $_GET['year'];
+			 }
+	   ?> 
+	<option value="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?>?ordered=22-66<?php if(strpos($moduleurl, 'year')) { echo "&year=".$orderstringstatus2 ; } ?><?php if(isset($_GET['dir'])  || isset($_GET['order']) ){ echo "&dir=".$_GET['dir']."&order=".$_GET['order'];}?>"<?php if($_GET['ordered'] == "22-66"):?> selected <?php endif;?>>Open</option>
+	<?php  }else{?>
+    <option value="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?>?ordered=22-66"<?php if($_GET['ordered'] == "22-66"):?>selected<?php endif;?>>Open</option>
+	<?php }?>
+		<?php if($paramFoundfirsttime > 0){ ?>
+		   <?php if(isset($_GET['year'])){
+             $orderstringstatus3 .=  $_GET['year'];
+			 }
+   ?> 
+	<option value="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?>?ordered=77<?php if(strpos($moduleurl, 'year')) { echo "&year=".$orderstringstatus3 ; } ?><?php if(isset($_GET['dir'])  || isset($_GET['order']) ){ echo "&dir=".$_GET['dir']."&order=".$_GET['order'];}?>"<?php if($_GET['ordered'] == "77"):?>selected<?php endif;?>>Invoiced</option>
+	<?php  }else{?>
+    <option value="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?>?ordered=77"<?php if($_GET['ordered'] == "77"):?>selected<?php endif;?>>Invoiced</option>
+	<?php }?>
+	<!--<option value="<?php //echo $referrerUrl.($paramFound > 0 ? '&' : '')?>?ordered=22-66">Open</option>
+	<option value="<?php //echo $referrerUrl.($paramFound > 0 ? '&' : '')?>?ordered=70">Invoiced</option> -->
+  
+</select>
+</div>
+
+<div  id="seasonfilterdiv" >
+<?php $_years = $this->getDefaultyear();?>
+<select name="seasonfilter" id="seasonfilter" onchange="location.href=this.value">
+<?php if(isset($_GET['ordered'])){
+             $ordersdefault=  $_GET['ordered'];
+			 }
+   ?> 
+   <option value="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?><?php if(strpos($moduleurl, 'ordered')) { echo "?ordered=".$ordersdefault ; } ?><?php if(isset($_GET['dir'])  || isset($_GET['order']) ){ echo "&dir=".$_GET['dir']."&order=".$_GET['order'];}?>">Season Filter</option>
+ <?php foreach($_years as $_yearsval):?>
+			<?php if($paramFoundfirsttime > 0){ ?>
+			<?php if(isset($_GET['ordered'])){
+				 $orderstring1 .=  $_GET['ordered'];
+				 }
+			?> 
+			<option value="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?>?year=<?php echo $_yearsval['Season'] ;?><?php if(strpos($moduleurl, 'ordered')) { echo "&ordered=".$orderstring1 ; } ?><?php if(isset($_GET['dir'])  || isset($_GET['order']) ){ echo "&dir=".$_GET['dir']."&order=".$_GET['order'];}?>" <?php if($_GET['year'] == $_yearsval['Season']):?>selected<?php endif;?>><?php echo $_yearsval['Season'] - 1 ;?>-<?php echo $_yearsval['Season'] ?></option>
+			<?php  }else{?>
+			<option value="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?>?year=<?php echo $_yearsval['Season'] ;?>"<?php if($_GET['year'] == $_yearsval['Season'] ):?>selected<?php endif;?>><?php echo $_yearsval['Season'] - 1 ;?>-<?php echo $_yearsval['Season'] ?></option>
+			<?php }?>
+ <?php endforeach;?>
+
+ 
+  
+	
+   <!--<option value="<?php  //echo $referrerUrl.($paramFound > 0 ? '&' : '')?>?year=2014">2013-2014</option>
+   <opion value="<?php //echo $referrerUrl.($paramFound > 0 ? '&' : '')?>?year=2015">2014-2015</option> -->
+  <!-- <option value="<?php //echo $referrerUrl."". ($paramFound > 0 ? '&' : '?') ?>year=2014">2014</option>
+   <option value="<?php// echo $referrerUrl ."history/index/seasonfilter/". ($paramFound > 0 ? '&' : '?') ?>year=2015">2015</option>
+ -->
+ 
+   </select>
+</div>
+
+<div class="buyinghistory-table-wrapper add_scroll_v_pricelist">  
+<table class="buyinghistory-buyinghistory-table blu_table" id="buyinghistory-invoicehistory-table">
+
+
+        <thead>
+            <th class="th details-control"></th>
+			<th class="th"><?php echo $this->__('Order'); ?>
+			     <?php 
+				 $currenturl = Mage::helper("core/url")->getCurrentUrl();
+				 
+
+				 if(strstr($currenturl,"desc") && strstr($currenturl,"OAORNO"))
+				 { 
+				 if(isset($_GET['year']) || isset($_GET['ordered']) )
+				                 {
+                                        $orderstringstatusorderded =  $_GET['ordered'];
+										$orderstringstatusyear =  $_GET['year'];
+			                      }
+				 ?>
+				  <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?>?dir=asc&amp;order=OAORNO<?php if(strpos($moduleurl, 'ordered')){ echo "&ordered=".$orderstringstatusorderded;?><?php }?><?php if(strpos($moduleurl, 'year')){ echo "&year=".$orderstringstatusyear;?><?php }?>">
+                    <i class="fa fa-arrow-down"></i>
+                 </a>
+				 <?php  
+				} else
+				  {
+				  if(isset($_GET['year']) || isset($_GET['ordered']) )
+				                 {
+                                        $orderstringstatusorderded =  $_GET['ordered'];
+										$orderstringstatusyear =  $_GET['year'];
+			                      }
+								  ?>
+				   <a title="Set Aescending Direction" href="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?>?dir=desc&amp;order=OAORNO<?php if(strpos($moduleurl, 'ordered')){ echo "&ordered=".$orderstringstatusorderded;?><?php }?><?php if(strpos($moduleurl, 'year')){ echo "&year=".$orderstringstatusyear; ?><?php }?>">
+                    <i class="fa fa-arrow-up"></i>
+                 </a>
+				<?php }
+				?>
+				
+				
+				</th>
+            <th class="th"><?php echo $this->__('PO'); ?>
+                   	
+				<?php	if(strstr($currenturl,"desc") && strstr($currenturl,"OACUOR"))
+				 { 
+				  if(isset($_GET['year']) || isset($_GET['ordered']) )
+				                 {
+                                        $orderstringstatusorderded =  $_GET['ordered'];
+										$orderstringstatusyear =  $_GET['year'];
+			                      }
+								  ?>
+				  <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?>?dir=asc&amp;order=OACUOR<?php if(strpos($moduleurl, 'ordered')){ echo "&ordered=".$orderstringstatusorderded;?><?php }?><?php if(strpos($moduleurl, 'year')){ echo "&year=".$orderstringstatusyear;?><?php }?>">
+                    <i class="fa fa-arrow-down"></i>
+                 </a>
+				 <?php }
+				 
+				 else
+				 {
+				  if(isset($_GET['year']) || isset($_GET['ordered']) )
+				                 {
+                                        $orderstringstatusorderded =  $_GET['ordered'];
+										$orderstringstatusyear =  $_GET['year'];
+			                      }
+								  ?>
+				   <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?>?dir=desc&amp;order=OACUOR<?php if(strpos($moduleurl, 'ordered')){ echo "&ordered=".$orderstringstatusorderded;?><?php }?><?php if(strpos($moduleurl, 'year')){ echo "&year=".$orderstringstatusyear;?><?php }?>">
+                    <i class="fa fa-arrow-up"></i>
+                 </a>
+				<?php }
+				?>
+                </th>
+            <th class="th" style="width: 11%;"><?php echo $this->__('Order Date'); ?>
+                   	
+				<?php	if(strstr($currenturl,"desc") && strstr($currenturl,"OAORDT"))
+				 {
+				  if(isset($_GET['year']) || isset($_GET['ordered']) )
+				                 {
+                                        $orderstringstatusorderded =  $_GET['ordered'];
+										$orderstringstatusyear =  $_GET['year'];
+			                      }?>
+				  <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?>?dir=asc&amp;order=OAORDT<?php if(strpos($moduleurl, 'ordered')){ echo "&ordered=".$orderstringstatusorderded;?><?php }?><?php if(strpos($moduleurl, 'year')){ echo "&year=".$orderstringstatusyear;?><?php }?>">
+                    <i class="fa fa-arrow-down"></i>
+                 </a>
+				 <?php }
+				 
+				 else
+				 {
+				  if(isset($_GET['year']) || isset($_GET['ordered']) )
+				                 {
+                                        $orderstringstatusorderded =  $_GET['ordered'];
+										$orderstringstatusyear =  $_GET['year'];
+			                      }?>
+				   <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?>?dir=desc&amp;order=OAORDT<?php if(strpos($moduleurl, 'ordered')){ echo "&ordered=".$orderstringstatusorderded;?><?php }?><?php if(strpos($moduleurl, 'year')){ echo "&year=".$orderstringstatusyear;?><?php }?>">
+                    <i class="fa fa-arrow-up"></i>
+                 </a>
+				<?php }
+				?>
+                </th>
+            <th class="th" style="width: 8%;" ><?php echo $this->__('Status'); ?>
+			
+			<?php	if(strstr($currenturl,"desc") && strstr($currenturl,"OAORST"))
+				 {
+				 
+				  if(isset($_GET['year']) || isset($_GET['ordered']) )
+				                 {
+                                        $orderstringstatusorderded =  $_GET['ordered'];
+										$orderstringstatusyear =  $_GET['year'];
+			                      }?>
+				  <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?>?dir=asc&amp;order=OAORST<?php if(strpos($moduleurl, 'ordered')){ echo "&ordered=".$orderstringstatusorderded;?><?php }?><?php if(strpos($moduleurl, 'year')){ echo "&year=".$orderstringstatusyear;?><?php }?>">
+                    <i class="fa fa-arrow-down"></i>
+                 </a>
+				 <?php }
+				 
+				 else
+				 {  if(isset($_GET['year']) || isset($_GET['ordered']) )
+				                 {
+                                        $orderstringstatusorderded =  $_GET['ordered'];
+										$orderstringstatusyear =  $_GET['year'];
+			                      }?>
+				   <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?>?dir=desc&amp;order=OAORST<?php if(strpos($moduleurl, 'ordered')){ echo "&ordered=".$orderstringstatusorderded;?><?php }?><?php if(strpos($moduleurl, 'year')){ echo "&year=".$orderstringstatusyear;?><?php }?>">
+                    <i class="fa fa-arrow-up"></i>
+                 </a>
+				<?php }
+				?>
+			</th>
+            <th class="th" style="width: 11%;"><?php echo $this->__('FFF Account'); ?>
+			<?php		if(strstr($currenturl,"desc") && strstr($currenturl,"OACUNO"))
+				 {  if(isset($_GET['year']) || isset($_GET['ordered']) )
+				                 {
+                                        $orderstringstatusorderded =  $_GET['ordered'];
+										$orderstringstatusyear =  $_GET['year'];
+			                      }?>
+				  <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?>?dir=asc&amp;order=OACUNO">
+                    <i class="fa fa-arrow-down"></i>
+                 </a>
+				 <?php }
+				 
+				 else
+				 {  if(isset($_GET['year']) || isset($_GET['ordered']) )
+				                 {
+                                        $orderstringstatusorderded =  $_GET['ordered'];
+										$orderstringstatusyear =  $_GET['year'];
+			                      }?>
+				   <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?>?dir=desc&amp;order=OACUNO<?php if(strpos($moduleurl, 'ordered')){ echo "&ordered=".$orderstringstatusorderded;?><?php }?><?php if(strpos($moduleurl, 'year')){ echo "&year=".$orderstringstatusyear;?><?php }?>">
+                    <i class="fa fa-arrow-up"></i>
+                 </a>
+				<?php }
+				?>
+			</th>
+
+			<th class="th" style="width: 11%;"><?php echo $this->__('Item'); ?>
+			<?php	if(strstr($currenturl,"desc") && strstr($currenturl,"OBITNO"))
+				 {  if(isset($_GET['year']) || isset($_GET['ordered']) )
+				                 {
+                                        $orderstringstatusorderded =  $_GET['ordered'];
+										$orderstringstatusyear =  $_GET['year'];
+			                      }?>
+				  <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?>?dir=asc&amp;order=OBITNO<?php if(strpos($moduleurl, 'ordered')){ echo "&ordered=".$orderstringstatusorderded;?><?php }?><?php if(strpos($moduleurl, 'year')){ echo "&year=".$orderstringstatusyear;?><?php }?>">
+                    <i class="fa fa-arrow-down"></i>
+                 </a>
+				 <?php }
+				 
+				 else
+				 {  if(isset($_GET['year']) || isset($_GET['ordered']) )
+				                 {
+                                        $orderstringstatusorderded =  $_GET['ordered'];
+										$orderstringstatusyear =  $_GET['year'];
+			                      }?>
+				   <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?>?dir=desc&amp;order=OBITNO<?php if(strpos($moduleurl, 'ordered')){ echo "&ordered=".$orderstringstatusorderded;?><?php }?><?php if(strpos($moduleurl, 'year')){ echo "&year=".$orderstringstatusyear;?><?php }?>">
+                    <i class="fa fa-arrow-up"></i>
+                 </a>
+				<?php }
+				?>
+			</th>
+	    	<th class="th" style="width: 12%;"><?php echo $this->__('Req Del Date')?>
+			<?php	if(strstr($currenturl,"desc") && strstr($currenturl,"OBFDED"))
+				 {  if(isset($_GET['year']) || isset($_GET['ordered']) )
+				                 {
+                                        $orderstringstatusorderded =  $_GET['ordered'];
+										$orderstringstatusyear =  $_GET['year'];
+			                      }?>
+				  <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?>?dir=asc&amp;order=OBFDED<?php if(strpos($moduleurl, 'ordered')){ echo "&ordered=".$orderstringstatusorderded;?><?php }?><?php if(strpos($moduleurl, 'year')){ echo "&year=".$orderstringstatusyear;?><?php }?>">
+                    <i class="fa fa-arrow-down"></i>
+                 </a>
+				 <?php }
+				 
+				 else
+				 {  if(isset($_GET['year']) || isset($_GET['ordered']) )
+				                 {
+                                        $orderstringstatusorderded =  $_GET['ordered'];
+										$orderstringstatusyear =  $_GET['year'];
+			                      }?>
+				   <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?>?dir=desc&amp;order=OBFDED<?php if(strpos($moduleurl, 'ordered')){ echo "&ordered=".$orderstringstatusorderded;?><?php }?><?php if(strpos($moduleurl, 'year')){ echo "&year=".$orderstringstatusyear;?><?php }?>">
+                    <i class="fa fa-arrow-up"></i>
+                 </a>
+				<?php }
+				?>
+			</th>
+	    	<th class="th"><?php echo $this->__('Order Qty')?>
+                    
+					
+				<?php	if(strstr($currenturl,"desc") && strstr($currenturl,"OBORQT"))
+				 {  if(isset($_GET['year']) || isset($_GET['ordered']) )
+				                 {
+                                        $orderstringstatusorderded =  $_GET['ordered'];
+										$orderstringstatusyear =  $_GET['year'];
+			                      }?>
+				  <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?>?dir=asc&amp;order=OBORQT<?php if(strpos($moduleurl, 'ordered')){ echo "&ordered=".$orderstringstatusorderded;?><?php }?><?php if(strpos($moduleurl, 'year')){ echo "&year=".$orderstringstatusyear;?><?php }?>">
+                    <i class="fa fa-arrow-down"></i>
+                 </a>
+				 <?php }
+				 
+				 else
+				 {  if(isset($_GET['year']) || isset($_GET['ordered']) )
+				                 {
+                                        $orderstringstatusorderded =  $_GET['ordered'];
+										$orderstringstatusyear =  $_GET['year'];
+			                      }?>
+				   <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?>?dir=desc&amp;order=OBORQT<?php if(strpos($moduleurl, 'ordered')){ echo "&ordered=".$orderstringstatusorderded;?><?php }?><?php if(strpos($moduleurl, 'year')){ echo "&year=".$orderstringstatusyear;?><?php }?>">
+                    <i class="fa fa-arrow-up"></i>
+                 </a>
+				<?php }
+				?>
+					</th>
+			<th class="th"><?php echo $this->__('Price')?>		
+		    <?php	if(strstr($currenturl,"desc") && strstr($currenturl,"OBNEPR"))
+				 {  if(isset($_GET['year']) || isset($_GET['ordered']) )
+				                 {
+                                        $orderstringstatusorderded =  $_GET['ordered'];
+										$orderstringstatusyear =  $_GET['year'];
+			                      }?>
+				  <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?>?dir=asc&amp;order=OBNEPR<?php if(strpos($moduleurl, 'ordered')){ echo "&ordered=".$orderstringstatusorderded;?><?php }?><?php if(strpos($moduleurl, 'year')){ echo "&year=".$orderstringstatusyear;?><?php }?>">
+                    <i class="fa fa-arrow-down"></i>
+                 </a>
+				 <?php }
+				 
+				 else
+				 {  if(isset($_GET['year']) || isset($_GET['ordered']) )
+				                 {
+                                        $orderstringstatusorderded =  $_GET['ordered'];
+										$orderstringstatusyear =  $_GET['year'];
+			                      }?>
+				   <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?>?dir=desc&amp;order=OBNEPR<?php if(strpos($moduleurl, 'ordered')){ echo "&ordered=".$orderstringstatusorderded;?><?php }?><?php if(strpos($moduleurl, 'year')){ echo "&year=".$orderstringstatusyear;?><?php }?>">
+                    <i class="fa fa-arrow-up"></i>
+                 </a>
+				<?php }
+				?>
+			</th>
+			
+			<th class="th"><?php echo $this->__('Total')?>	
+			<?php	if(strstr($currenturl,"desc") && strstr($currenturl,"OBLNA2"))
+				 {  if(isset($_GET['year']) || isset($_GET['ordered']) )
+				                 {
+                                        $orderstringstatusorderded =  $_GET['ordered'];
+										$orderstringstatusyear =  $_GET['year'];
+			                      }?>
+				  <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?>?dir=asc&amp;order=OBLNA2<?php if(strpos($moduleurl, 'ordered')){ echo "&ordered=".$orderstringstatusorderded;?><?php }?><?php if(strpos($moduleurl, 'year')){ echo "&year=".$orderstringstatusyear;?><?php }?>">
+                    <i class="fa fa-arrow-down"></i>
+                 </a>
+				 <?php }
+				 
+				 else
+				 {  if(isset($_GET['year']) || isset($_GET['ordered']) )
+				                 {
+                                        $orderstringstatusorderded =  $_GET['ordered'];
+										$orderstringstatusyear =  $_GET['year'];
+			                      }?>
+				   <a title="Set Descending Direction" href="<?php echo Mage::getBaseUrl()."history/index/seasonfilter/"?>?dir=desc&amp;order=OBLNA2<?php if(strpos($moduleurl, 'ordered')){ echo "&ordered=".$orderstringstatusorderded;?><?php }?><?php if(strpos($moduleurl, 'year')){ echo "&year=".$orderstringstatusyear;?><?php }?>">
+                    <i class="fa fa-arrow-up"></i>
+                 </a>
+				<?php }
+				?>
+			</th>
+        </thead>
+   
+   <tbody>
+   <?php 
+if($order_data != null)
+{
+   foreach($order_data as $order_data_field):?>
+        <tr>
+		    <td><?php echo $order_data_field["orderNumber"]; ?></td>
+			<td><?php echo $order_data_field["poNumber"]; ?></td>
+		<td><?php
+                $order_data_date =  Mage::helper('core')->formatDate($order_data_field["orderDate"], Mage_Core_Model_Locale::FORMAT_TYPE_SHORT, false);
+			echo $order_data_date; ?></td>
+			<td><?php echo $order_data_field["orderStatus"]; ?></td>
+			<td><?php echo $order_data_field["accountNumber"]; ?></td>
+
+			<td><?php echo $order_data_field["prodDesc"]; ?></td>
+			<td><?php 
+			 $order_data_deliverdate = Mage::helper('core')->formatDate($order_data_field["deliveryDate"], Mage_Core_Model_Locale::FORMAT_TYPE_SHORT, false);
+			echo $order_data_deliverdate; ?></td>
+			<td><?php echo $order_data_field["qtyOrdered"]; ?></td>
+			<td><?php echo $order_data_field["priceEach"]; ?></td>
+			<td><?php echo $order_data_field["lineTotal"]; ?></td>
+		</tr>
+	<?php endforeach;?>	
+
+   <?php } else {?>
+<tr>
+		    <td><?php  echo "No Data Found"?>  </td> </tr>
+<?php  }?> 
+   </tbody>
+<style>
+.th.details-control{ display:none;}
+.layout.layout-1-col select#statusfilter ,.layout.layout-1-col select#seasonfilter  {
+    line-height: 17%;
+    padding: 0.5%;
+    width: 19%;
+	float:left
+}
+#seasonfilterdiv > select {
+    margin: 0 1% 3% 3%;
+}
+</style>
+</table>
+</div>
+
+<?php
+/*
+order collection end
+*/
+?>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Biosupply_Report>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Biosupply_Report>
+    </modules>
+</config> 
