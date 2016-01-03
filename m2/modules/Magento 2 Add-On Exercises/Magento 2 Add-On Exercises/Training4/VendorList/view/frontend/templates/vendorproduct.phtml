@@ -1,0 +1,34 @@
+<?php $PrdsVendors = $this->getProductvendorlist(); ?>
+<?php if ($PrdsVendors && count($PrdsVendors)): ?>
+	    <div class="table-wrapper orders-history">
+        <table class="data table table-order-items history" id="my-orders-table">
+            <caption class="table-caption"><?php echo __('Orders') ?></caption>
+            <thead>
+                <tr>
+                    <th scope="col" class="col id"><?php echo __('Product Id #') ?></th>
+					<th scope="col" class="col date"><?php echo __('Product Name') ?></th> 
+                    <th scope="col" class="col date"><?php echo __('Vendor Id') ?></th>  
+					<th scope="col" class="col date"><?php echo __('Vendor Name') ?></th> 
+					<th scope="col" class="col date"><?php echo __('Vendor Status') ?></th> 
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($PrdsVendors as $Itemdata): ?>
+                    <tr>
+                        <td><?php echo $Itemdata['product_id'] ?></td>
+                        <td><?php echo $this->getProductName($Itemdata['product_id']) ?></td>
+                         <td><?php echo $Itemdata['vendor_id'] ?></td>
+                        <td><?php echo $this->getVendorName($Itemdata['vendor_id']) ?></td>
+						<td><?php echo $this->getVendorStatus($Itemdata['vendor_id']) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <?php if ($this->getPagerHtml()): ?>
+        <div class="order-products-toolbar toolbar bottom"><?php echo $this->getPagerHtml(); ?></div>
+    <?php endif ?>
+<?php else: ?>
+    <div class="message info empty"><span><?php echo __('You have placed no orders.'); ?></span></div>
+<?php endif  ?>
+

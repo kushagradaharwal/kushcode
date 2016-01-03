@@ -1,0 +1,45 @@
+
+<div style=" border: 1px solid;    padding: 10px 20px;    width: 300px;">
+	<div>Vendor Id: <input type="text" id="load_vendor_id" name="load_vendor_id" style="width: 100px;">
+	<input type="submit" onclick="loadData();" name="loaddata" id="loaddata" value="load" /></div>
+	
+	<!--  http://localhost/cisco/rest/V1/vendor/load/9 -->
+</div>
+<div style=" border: 1px solid;    padding: 10px 20px;    width: 300px; margin: 10px 0;">
+	
+	<div>Vendor Name: <input type="text" id="vendor_name" name="vendor_name"  style="width: 100px;">
+	<input type="submit"  name="savedata"  onclick="saveData();"  id="savedata" value="save" /></div>
+	
+	<!--   http://localhost/cisco/rest/V1/vendor/save/11 -->
+</div>
+<div style=" border: 1px solid;    padding: 10px 20px;    width: 300px; margin: 10px 0;">
+	
+	<div><input type="submit"  name="getlistdata" onclick="listData();"  id="getlistdata" value="getList" /></div>
+
+	<!-- http://localhost/cisco/rest/V1/vendor/getList  -->
+</div>
+<div style=" border: 1px solid;    padding: 10px 20px;    width: 400px; margin: 10px 0;">
+	
+	<div>Vendor Id: <input type="text" id="get_vendor_prdid" name="get_vendor_prdid"  style="width: 100px;">
+	<input type="submit"  name="getprdids"  onclick="prdsData();"  id="getprdids" value="getAssociatedProductcIds" /></div>
+
+	<!-- http://localhost/cisco/rest/V1/vendor/getAssociatedProductcIds/8  -->
+</div>
+
+<script type="text/javascript">
+function  loadData(){
+	window.location='<?php echo $this->getUrl() .'rest/V1/vendor/load/' ;?>' + document.getElementById('load_vendor_id').value;	
+}
+
+function  saveData(){
+	window.location='<?php echo $this->getUrl() .'rest/V1/vendor/save/' ;?>' + document.getElementById('vendor_name').value;		
+}
+
+function  listData(){
+	window.location='<?php echo $this->getUrl() .'rest/V1/vendor/getList' ;?>';
+}
+
+function  prdsData(){
+	window.location='<?php echo $this->getUrl() .'rest/V1/vendor/getAssociatedProductcIds/' ;?>' + document.getElementById('get_vendor_prdid').value;	
+}
+</script>

@@ -1,0 +1,10 @@
+
+Training4_Vendor
+
+Frontend :  Product Page   
+Adminpanel:  Content > Vendor Grid
+
+Training4_VendorList
+
+Vendor List Frontend :  http://yoururl/vendorlist/index/index
+Vendor's Product List Frontend :   http://yoururl/vendorlist/index/vendorproduct

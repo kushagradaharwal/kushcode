@@ -1,0 +1,6 @@
+
+Training2_OrderController
+
+http://yoururl/ordercontroller/index/index?json=1 --   redirect to Training2_OrderController
+
+http://yoururl/ordercontroller/index/index --   redirect to 3 col layout [Training3_OrderInfo]

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * system configiration settings
+ * @category Zensar
+ * @module Zensar_Sap 
+ * @author zensar team
+ * @created at 17-Nov-2015 11:43 PM IST
+ * @modified at 17-Nov-2015 11:43 PM IST
+-->
+<config>
+    <tabs>
+        <sap translate="label" module="sap">
+            <label>SAP</label>
+            <sort_order>12</sort_order>
+        </sap>
+    </tabs>
+    <sections>
+        <sap_settings translate="label" module="sap">
+            <label>SAP settings</label>
+            <tab>sap</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>0</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>            
+            <groups>
+                <sap_connection_details translate="label" module="sap">
+                    <label>SAP connection details</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>0</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enabled translate="label">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Select "Yes" to enable Custom Promotions</comment>
+                        </enabled>
+                        <connect_url translate="label">
+                            <label>Connection Url</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Add Connection Url</comment>
+                        </connect_url>
+                        <host translate="label">
+                            <label>Host</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Host Entry</comment>
+                        </host>
+                        <api_key translate="label">
+                            <label>Api Key</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>APi Key</comment>
+                        </api_key>
+                        <api_password translate="label">
+                            <label>Api Password</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>APi Password</comment>
+                        </api_password>
+                    </fields>
+                </sap_connection_details>
+            </groups>
+        </sap_settings>
+    </sections> 
+</config>

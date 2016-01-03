@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+ * Zensar_sap module activation file
+ * @category Zensar
+ * @module Zensar_Sap 
+ * @author zensar team
+ * @created at 17-Nov-2015 11:43 PM IST
+ * @modified at 17-Nov-2015 11:43 PM IST
+-->
+<config>
+    <modules>
+        <Zensar_Sap>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Zensar_Sap>
+    </modules>
+</config>

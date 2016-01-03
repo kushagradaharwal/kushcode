@@ -1,0 +1,8 @@
+<?php
+$getJsonData = file_get_contents('https://freegeoip.net/json/');
+$jsonData = json_decode($getJsonData, TRUE);
+?>
+<p style="float-left">Training1_FreeGeoIp</p>
+<p style="float-left">
+    <?php echo " Visitor's Country: ".  $jsonData['country_name'] ;  ?>
+</p>

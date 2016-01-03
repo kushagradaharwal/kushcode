@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * configuration file for Sap module
+ * @category Zensar
+ * @module Zensar_Sap 
+ * @author zensar team
+ * @created at 17-Nov-2015 11:43 PM IST
+ * @modified at 17-Nov-2015 11:43 PM IST
+-->
+<config>
+    <modules>
+        <Zensar_Sap>
+            <version>1.0.0</version>
+        </Zensar_Sap>
+    </modules>
+    <frontend>
+        <routers>
+            <sap>
+                <use>standard</use>
+                <args>
+                    <module>Zensar_Sap</module>
+                    <frontName>sap</frontName>                
+                </args>
+            </sap>
+        </routers>
+        <layout>
+            <updates>
+                <file>sap.xml</file>
+            </updates>
+        </layout>
+    </frontend>
+    <global>
+        <blocks>
+            <sap>
+                <class>Zensar_Sap_Block</class>
+            </sap>
+        </blocks>
+        <models>
+            <sap>
+                <class>Zensar_Sap_Model</class>
+            </sap>
+        </models>
+        <helpers>
+            <sap>
+                <class>Zensar_Sap_Helper</class>
+            </sap>
+        </helpers>
+    </global>
+</config>

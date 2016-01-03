@@ -1,0 +1,34 @@
+<h1>Welcome in Training3 OrderInfo !!</h1>
+<div>
+	<div><label>Order Id # </label></div>
+	<p>Note: Enter order id , instead of order no.</p>
+	<div><input type="text" name="orderid" id="orderid"  style=" margin: 10px 0; width: 150px;"/></div>
+	<div><button id="test" name="test" onclick="divFunction();">Get Order Info</button></div>
+	<div id="orderdetails" style=" margin: 10px 0;"></div>
+</div>
+<?php //echo $this->getUrl('*/*/test') ?>
+
+<script type="text/javascript">
+function divFunction(){	
+	if(document.getElementById('orderid').value){
+		
+		jQuery.ajax( {
+			url: '<?php echo $this->getUrl('*/*/orderdetails') ?>',
+			data: {orderid: document.getElementById('orderid').value},
+			type: 'POST'
+		}).done(function(response) { 			
+			document.getElementById('orderdetails').innerHTML = response ;
+			//console.log(response); 
+		});
+		
+	}else{
+		
+		alert("Enter Order Id");
+		document.getElementById('orderid').focus();
+		
+	}
+		
+}
+
+
+</script>

@@ -1,0 +1,3 @@
+1. Copy all code to /app
+2. set theme as given in /exercise_theme.png
+3. clear cache and go to frontend - product review

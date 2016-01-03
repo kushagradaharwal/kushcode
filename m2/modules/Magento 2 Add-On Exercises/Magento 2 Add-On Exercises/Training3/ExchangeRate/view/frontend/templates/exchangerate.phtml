@@ -1,0 +1,25 @@
+<?php
+	/* Training3_ExchangeRate */
+
+	
+	$exchangeRatesApiData = file_get_contents('http://api.fixer.io/latest?base='.$this->getcurrencycodedata());
+	$exchangeRates = json_decode($exchangeRatesApiData);
+	if(isset($exchangeRates->rates) && is_object($exchangeRates->rates)){
+		$EUR_ER = '';
+		$USD_ER = '';
+		$basecurrency = $exchangeRates->base;
+		if($basecurrency == 'USD'){
+			$EUR_ER =  $exchangeRates->rates->EUR;
+			$USD_ER  = 'NA';
+		}else if($basecurrency == 'EUR'){
+			$USD_ER = $exchangeRates->rates->USD;
+			$EUR_ER  = 'NA';
+		}else{
+			$EUR_ER =  $exchangeRates->rates->EUR;
+			$USD_ER = $exchangeRates->rates->USD;
+		}
+	}
+?>
+<p style="float-left">Training3_ExchangeRate</p>
+<p style="float-left">    <?php echo "<b> Store Currency : </b> ".$basecurrency  ?></p>
+<p style="float-left">    <?php echo "<b> Exchange Rate[EUR/USD]:</b> ". $EUR_ER .' / ' .$USD_ER  ?></p>

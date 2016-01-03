@@ -1,0 +1,38 @@
+<?php $Vendors = $this->getVendors(); ?>
+<?php if ($Vendors && count($Vendors)): ?>
+	    <div class="table-wrapper orders-history">
+        <table class="data table table-order-items history" id="my-orders-table">
+            <caption class="table-caption"><?php echo __('Orders') ?></caption>
+            <thead>
+                <tr>
+                    <th scope="col" class="col id"><?php echo __('Vendor Id #') ?></th>
+                    <th scope="col" class="col date"><?php echo __('Vendor Name') ?></th>    
+					<th scope="col" class="col date"><?php echo __('Vendor Status') ?></th> 
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($Vendors as $_order): ?>
+                    <tr>
+                        <td><?php echo $_order->getId() ?></td>
+                        <td><?php echo $_order->getName() ?></td>
+                        <td><?php 
+						if($_order->getIsActive() == 1){
+							echo "Enable";
+						}else if($_order->getIsActive() == 2){
+							echo "Disable";
+						}else{
+							echo "NA";
+						}
+						?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <?php if ($this->getPagerHtml()): ?>
+        <div class="order-products-toolbar toolbar bottom"><?php echo $this->getPagerHtml(); ?></div>
+    <?php endif ?>
+<?php else: ?>
+    <div class="message info empty"><span><?php echo __('You have placed no orders.'); ?></span></div>
+<?php endif  ?>
+

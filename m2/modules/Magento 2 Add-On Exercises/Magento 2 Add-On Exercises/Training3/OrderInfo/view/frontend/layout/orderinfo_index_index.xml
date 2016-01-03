@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<page layout="3columns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <body>
+		    <referenceBlock name="sidebar.main">
+            <block class="Magento\Theme\Block\Html\Header" name="header" as="header" before="-">
+                <arguments>
+                    <argument name="show_part" xsi:type="string">welcome</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+        <referenceContainer name="content">
+            <block class="Training3\OrderInfo\Block\OrderInfo" name="orderinfo" template="orderinfo.phtml" />
+        </referenceContainer>
+    </body>
+</page>

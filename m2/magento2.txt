@@ -1,0 +1,49 @@
+magento 2 installation steps
+#################################
+
+---first set path on enviromat varrible
+C:\xampp\php;C:\xampp\php\php.exe
+
+
+install composer
+
+---put three files 
+composer.phar,composer.bat,composer.json inside php folder
+
+
+---cmd : 
+composer install
+
+--upgrade
+cmd :
+php bin/magento setup:upgrade
+
+
+php bin/magento setup to check all cmd
+
+
+-php -f bin/magento setup:upgrade
+
+
+
+-
+
+
+
+
+####################################
+
+Blogs to read magento 2
+
+-https://www.ashsmith.io/magento2/module-from-scratch-module-part-1-setup/
+
+
+-http://www.atwix.com/magento/hello-world-module-for-magento-2/
+
+
+
+
+http://www.techflirt.com/tutorials/oop-in-php/abstract-classes-interface.html
+
+http://www.killerphp.com/articles/php-interfaces/
+

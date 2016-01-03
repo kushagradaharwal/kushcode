@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Created by wilson.sun330@gmail.com
+ * Date: 13/05/2015
+* Time: 5:02 PM
+*/
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<preference for="Magento\Catalog\Controller\Product\View" type="Training2\Specific404page\Controller\Product\View" />
+<preference for="Magento\Catalog\Controller\Category\View" type="Training2\Specific404page\Controller\Category\View" /> 
+<preference for="Magento\Cms\Controller\Noroute\Index" type="Training2\Specific404page\Controller\Noroute\Index" /> 
+
+</config>
